@@ -72,6 +72,8 @@ public class AudioHandler extends CordovaPlugin {
     private String recordId;
     private String fileUriStr;
 
+    private boolean destroy_all = false;
+
     /**
      * Constructor.
      */
@@ -105,7 +107,9 @@ public class AudioHandler extends CordovaPlugin {
         CordovaResourceApi resourceApi = webView.getResourceApi();
         PluginResult.Status status = PluginResult.Status.OK;
         String result = "";
-
+        if(destroy_all){
+            return true;
+        }
         if (action.equals("startRecordingAudio")) {
             recordId = args.getString(0);
             String target = args.getString(1);
@@ -192,6 +196,7 @@ public class AudioHandler extends CordovaPlugin {
      * Stop all audio players and recorders.
      */
     public void onDestroy() {
+        this.destroy_all = true;
         if (!players.isEmpty()) {
             onLastPlayerReleased();
         }
